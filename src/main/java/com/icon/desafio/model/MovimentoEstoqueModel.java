@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
+import com.icon.desafio.dto.ProdutoDTO;
 import com.icon.desafio.enums.TipoMovimentacao;
 
 import jakarta.persistence.Entity;

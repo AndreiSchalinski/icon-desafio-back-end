@@ -3,8 +3,6 @@ package com.icon.desafio.service;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +59,23 @@ public class ServiceProduto {
         } else {
             throw new EntityNotFoundException("Produto com ID " + id + " não encontrado.");
         }
+    }
+
+    public Integer calcularSaldoMovimentoEstoque(ProdutoDTO dto, String tipoMovimentoEstoque) {
+
+        ProdutoModel produto = repositoryProduto.findById(dto.id())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado para editar cadastro!"));
+
+        if (tipoMovimentoEstoque.equals("ENTRADA")) {
+            return produto.getQuantidade() + dto.quantidade();
+        } else {
+            return produto.getQuantidade() - dto.quantidade();
+        }
+
+    }
+
+    public void atualizaSaldoProduto(ProdutoModel model) {
+        repositoryProduto.save(model);
     }
 
 }
