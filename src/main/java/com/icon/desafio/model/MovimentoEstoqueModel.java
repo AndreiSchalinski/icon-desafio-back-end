@@ -2,7 +2,6 @@ package com.icon.desafio.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
 import com.icon.desafio.enums.TipoMovimentacao;
@@ -53,8 +52,9 @@ public class MovimentoEstoqueModel {
 
         this.id = dto.id();
 
-        if (dto.produto() != null) {
-            this.produto = new ProdutoModel(dto.produto());
+        if (dto.produtoId() != null) {
+            this.produto = new ProdutoModel();
+            this.produto.setId(dto.produtoId());
         }
 
         this.tipoMovimentacao = dto.tipoMovimentacao();

@@ -1,5 +1,6 @@
 package com.icon.desafio.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -9,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icon.desafio.dto.BalancoProdutoDTO;
 import com.icon.desafio.dto.ProdutoDTO;
 import com.icon.desafio.model.ProdutoModel;
 import com.icon.desafio.service.ServiceProduto;
@@ -43,13 +46,18 @@ public class ControllerProduto {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Optional<ProdutoModel>> getProduto(@PathVariable("id") Long id) {
+    public ResponseEntity<ProdutoDTO> getProduto(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(serviceProduto.buscarProdutoID(id));
     }
 
     @GetMapping("list")
     public ResponseEntity<Set<ProdutoDTO>> getProdutos() {
         return ResponseEntity.ok().body(serviceProduto.carregarListaProdutos());
+    }
+
+    @GetMapping("/balanco")
+    public ResponseEntity<Set<BalancoProdutoDTO>> getBuscaProdutoPorTipo(@RequestParam(required = false) Long id) {
+        return ResponseEntity.ok().body(serviceProduto.buscarProdutoPorTipo(id));
     }
 
     @DeleteMapping("{id}")

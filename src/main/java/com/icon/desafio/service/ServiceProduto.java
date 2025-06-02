@@ -1,14 +1,16 @@
 package com.icon.desafio.service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.icon.desafio.dto.MovimentoEstoqueDTO;
+import com.icon.desafio.dto.BalancoProdutoDTO;
 import com.icon.desafio.dto.ProdutoDTO;
+import com.icon.desafio.enums.TipoMovimentacao;
 import com.icon.desafio.model.ProdutoModel;
 import com.icon.desafio.model.TipoProdutoModel;
 import com.icon.desafio.repository.RepositoryProduto;
@@ -44,8 +46,13 @@ public class ServiceProduto {
 
     }
 
-    public Optional<ProdutoModel> buscarProdutoID(Long id) {
-        return repositoryProduto.findById(id);
+    public ProdutoDTO buscarProdutoID(Long id) {
+
+        Optional<ProdutoModel> optionalProduto = repositoryProduto.findById(id);
+
+        ProdutoDTO dto = new ProdutoDTO(optionalProduto.get());
+
+        return dto;
     }
 
     public Set<ProdutoDTO> carregarListaProdutos() {
@@ -61,6 +68,54 @@ public class ServiceProduto {
         } else {
             throw new EntityNotFoundException("Produto com ID " + id + " não encontrado.");
         }
+    }
+
+    public Integer calcularSaldoMovimentoEstoque(MovimentoEstoqueDTO dto) {
+
+        ProdutoModel produto = repositoryProduto.findById(dto.produtoId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado para editar cadastro!"));
+
+        if (dto.tipoMovimentacao() == TipoMovimentacao.ENTRADA) {
+            return Integer.sum(produto.getQuantidade(), dto.quantidadeMovimentada());
+        } else {
+            return produto.getQuantidade() - dto.quantidadeMovimentada();
+        }
+
+    }
+
+    public void atualizaSaldoProduto(ProdutoModel model) {
+        repositoryProduto.save(model);
+    }
+
+    public Set<BalancoProdutoDTO> buscarProdutoPorTipo(Long idTipoProduto) {
+
+        Set<Object[]> listProdutosTipo = repositoryProduto.consultarProdutosPorTipoComQuantidades(idTipoProduto);
+
+        Set<BalancoProdutoDTO> dtos = new HashSet<>();
+
+        for (Object[] row : listProdutosTipo) {
+
+            Long produtoId = (Long) row[0];
+            String descricao = (String) row[1];
+            Long tipoProdutoId = (Long) row[2];
+            String tipoProdutoNome = (String) row[3];
+            Long totalSaidas = (Long) row[4];
+            Long totalEntradas = (Long) row[5];
+            Integer saldoProdutoDisponivel = (Integer) row[6];
+
+            BalancoProdutoDTO dto = new BalancoProdutoDTO(
+                    produtoId,
+                    descricao,
+                    tipoProdutoId,
+                    tipoProdutoNome,
+                    totalSaidas,
+                    totalEntradas,
+                    saldoProdutoDisponivel);
+
+            dtos.add(dto);
+        }
+
+        return dtos;
     }
 
 }
