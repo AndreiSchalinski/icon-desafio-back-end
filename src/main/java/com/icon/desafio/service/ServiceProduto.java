@@ -49,8 +49,13 @@ public class ServiceProduto {
 
     }
 
-    public Optional<ProdutoModel> buscarProdutoID(Long id) {
-        return repositoryProduto.findById(id);
+    public ProdutoDTO buscarProdutoID(Long id) {
+
+        Optional<ProdutoModel> optionalProduto = repositoryProduto.findById(id);
+
+        ProdutoDTO dto = new ProdutoDTO(optionalProduto.get());
+
+        return dto;
     }
 
     public Set<ProdutoDTO> carregarListaProdutos() {

@@ -44,7 +44,7 @@ public class ControllerProduto {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Optional<ProdutoModel>> getProduto(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getProduto(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(serviceProduto.buscarProdutoID(id));
     }
 
