@@ -1,9 +1,7 @@
 package com.icon.desafio.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,11 +57,11 @@ public class ServiceMovimentoEstoque {
         return repositoryMovimentoEstoque.findAll().stream().map(MovimentoEstoqueDTO::new).collect(Collectors.toSet());
     }
 
-    public List<MovimentacaoRelatorioDTO> gerarRelatorioLucros() {
+    public Set<MovimentacaoRelatorioDTO> gerarRelatorioLucros() {
 
-        List<Object[]> resultados = repositoryMovimentoEstoque.gerarRelatorioLucros();
+        Set<Object[]> resultados = repositoryMovimentoEstoque.gerarRelatorioLucros();
 
-        List<MovimentacaoRelatorioDTO> dtos = new ArrayList<>();
+        Set<MovimentacaoRelatorioDTO> dtos = new HashSet<>();
 
         for (Object[] row : resultados) {
 

@@ -1,15 +1,12 @@
 package com.icon.desafio.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.icon.desafio.dto.MovimentacaoRelatorioDTO;
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
 import com.icon.desafio.dto.BalancoProdutoDTO;
 import com.icon.desafio.dto.ProdutoDTO;
@@ -90,11 +87,11 @@ public class ServiceProduto {
         repositoryProduto.save(model);
     }
 
-    public List<BalancoProdutoDTO> buscarProdutoPorTipo(Long idTipoProduto) {
+    public Set<BalancoProdutoDTO> buscarProdutoPorTipo(Long idTipoProduto) {
 
-        List<Object[]> listProdutosTipo = repositoryProduto.consultarProdutosPorTipoComQuantidades(idTipoProduto);
+        Set<Object[]> listProdutosTipo = repositoryProduto.consultarProdutosPorTipoComQuantidades(idTipoProduto);
 
-        List<BalancoProdutoDTO> dtos = new ArrayList<>();
+        Set<BalancoProdutoDTO> dtos = new HashSet<>();
 
         for (Object[] row : listProdutosTipo) {
 

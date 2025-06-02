@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icon.desafio.dto.BalancoProdutoDTO;
 import com.icon.desafio.dto.ProdutoDTO;
 import com.icon.desafio.model.ProdutoModel;
 import com.icon.desafio.service.ServiceProduto;
@@ -44,7 +46,7 @@ public class ControllerProduto {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getProduto(@PathVariable("id") Long id) {
+    public ResponseEntity<ProdutoDTO> getProduto(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(serviceProduto.buscarProdutoID(id));
     }
 
@@ -53,8 +55,8 @@ public class ControllerProduto {
         return ResponseEntity.ok().body(serviceProduto.carregarListaProdutos());
     }
 
-    @GetMapping("/balanco/{id}")
-    public ResponseEntity<?> getBuscaProdutoPorTipo(@PathVariable("id") Long id) {
+    @GetMapping("/balanco")
+    public ResponseEntity<Set<BalancoProdutoDTO>> getBuscaProdutoPorTipo(@RequestParam(required = false) Long id) {
         return ResponseEntity.ok().body(serviceProduto.buscarProdutoPorTipo(id));
     }
 
