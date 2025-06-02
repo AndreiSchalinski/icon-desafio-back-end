@@ -54,8 +54,9 @@ public class MovimentoEstoqueModel {
 
         this.id = dto.id();
 
-        if (dto.produto() != null) {
-            this.produto = new ProdutoModel(dto.produto());
+        if (dto.produtoId() != null) {
+            this.produto = new ProdutoModel();
+            this.produto.setId(dto.produtoId());
         }
 
         this.tipoMovimentacao = dto.tipoMovimentacao();

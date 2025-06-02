@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.icon.desafio.dto.MovimentoEstoqueDTO;
 import com.icon.desafio.dto.ProdutoDTO;
+import com.icon.desafio.enums.TipoMovimentacao;
 import com.icon.desafio.model.ProdutoModel;
 import com.icon.desafio.model.TipoProdutoModel;
 import com.icon.desafio.repository.RepositoryProduto;
@@ -61,15 +63,15 @@ public class ServiceProduto {
         }
     }
 
-    public Integer calcularSaldoMovimentoEstoque(ProdutoDTO dto, String tipoMovimentoEstoque) {
+    public Integer calcularSaldoMovimentoEstoque(MovimentoEstoqueDTO dto) {
 
-        ProdutoModel produto = repositoryProduto.findById(dto.id())
+        ProdutoModel produto = repositoryProduto.findById(dto.produtoId())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado para editar cadastro!"));
 
-        if (tipoMovimentoEstoque.equals("ENTRADA")) {
-            return produto.getQuantidade() + dto.quantidade();
+        if (dto.tipoMovimentacao() == TipoMovimentacao.ENTRADA) {
+            return Integer.sum(produto.getQuantidade(), dto.quantidadeMovimentada());
         } else {
-            return produto.getQuantidade() - dto.quantidade();
+            return produto.getQuantidade() - dto.quantidadeMovimentada();
         }
 
     }
