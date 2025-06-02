@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.icon.desafio.dto.MovimentacaoRelatorioDTO;
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
+import com.icon.desafio.dto.ProdutoDTO;
 import com.icon.desafio.enums.TipoMovimentacao;
 import com.icon.desafio.model.MovimentoEstoqueModel;
 import com.icon.desafio.model.ProdutoModel;
@@ -35,12 +36,9 @@ public class ServiceMovimentoEstoque {
 
     public MovimentoEstoqueDTO salvarMovimentacao(MovimentoEstoqueDTO dto) {
 
-        Optional<ProdutoModel> produtoOpt = serviceProduto.buscarProdutoID(dto.produtoId());
-        if (produtoOpt.isEmpty()) {
-            return null;
-        }
+        ProdutoDTO dtoProduto = serviceProduto.buscarProdutoID(dto.produtoId());
 
-        ProdutoModel produto = produtoOpt.get();
+        ProdutoModel produto = new ProdutoModel(dtoProduto);
 
         Integer saldoPrevisionado = serviceProduto.calcularSaldoMovimentoEstoque(dto);
 
