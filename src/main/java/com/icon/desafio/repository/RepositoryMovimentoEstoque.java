@@ -1,10 +1,9 @@
 package com.icon.desafio.repository;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import com.icon.desafio.model.MovimentoEstoqueModel;
 
@@ -21,6 +20,6 @@ public interface RepositoryMovimentoEstoque extends JpaRepository<MovimentoEstoq
             WHERE m.tipoMovimentacao = com.icon.desafio.enums.TipoMovimentacao.SAIDA
             GROUP BY p.id
             """)
-    List<Object[]> gerarRelatorioLucros();
+    Set<Object[]> gerarRelatorioLucros();
 
 }

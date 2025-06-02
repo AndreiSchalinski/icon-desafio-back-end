@@ -1,6 +1,7 @@
 package com.icon.desafio.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,6 @@ public interface RepositoryProduto extends JpaRepository<ProdutoModel, Long> {
                 WHERE (:tipoId IS NULL OR p.tipoProduto.id = :tipoId)
                 GROUP BY p.id, p.descricao, p.tipoProduto.id, p.tipoProduto.nome
             """)
-    List<Object[]> consultarProdutosPorTipoComQuantidades(@Param("tipoId") Long tipoId);
+    Set<Object[]> consultarProdutosPorTipoComQuantidades(@Param("tipoId") Long tipoId);
 
 }
