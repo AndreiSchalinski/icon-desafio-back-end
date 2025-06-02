@@ -1,5 +1,7 @@
 package com.icon.desafio.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.icon.desafio.dto.MovimentacaoRelatorioDTO;
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
 import com.icon.desafio.enums.TipoMovimentacao;
 import com.icon.desafio.model.MovimentoEstoqueModel;
@@ -58,8 +61,31 @@ public class ServiceMovimentoEstoque {
         return repositoryMovimentoEstoque.findAll().stream().map(MovimentoEstoqueDTO::new).collect(Collectors.toSet());
     }
 
-    public List<Object[]> gerarRelatorioLucros() {
-        return repositoryMovimentoEstoque.gerarRelatorioLucros();
+    public List<MovimentacaoRelatorioDTO> gerarRelatorioLucros() {
+
+        List<Object[]> resultados = repositoryMovimentoEstoque.gerarRelatorioLucros();
+
+        List<MovimentacaoRelatorioDTO> dtos = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+
+            String descricao = (String) row[0];
+            Long totalQuantidadeMovimentada = (Long) row[1];
+            BigDecimal totalLucroBruto = (BigDecimal) row[2];
+            BigDecimal totalLucroLiquido = (BigDecimal) row[3];
+            BigDecimal totalFornecedor = (BigDecimal) row[4];
+
+            MovimentacaoRelatorioDTO dto = new MovimentacaoRelatorioDTO(
+                    descricao,
+                    totalQuantidadeMovimentada,
+                    totalLucroBruto,
+                    totalLucroLiquido,
+                    totalFornecedor);
+
+            dtos.add(dto);
+        }
+
+        return dtos;
     }
 
 }
