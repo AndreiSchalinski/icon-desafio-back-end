@@ -1,5 +1,6 @@
 package com.icon.desafio.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -50,6 +51,11 @@ public class ControllerProduto {
     @GetMapping("list")
     public ResponseEntity<Set<ProdutoDTO>> getProdutos() {
         return ResponseEntity.ok().body(serviceProduto.carregarListaProdutos());
+    }
+
+    @GetMapping("/balanco/{id}")
+    public ResponseEntity<?> getBuscaProdutoPorTipo(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(serviceProduto.buscarProdutoPorTipo(id));
     }
 
     @DeleteMapping("{id}")
