@@ -33,4 +33,9 @@ public class ControllerMovimentoEstoque {
         return ResponseEntity.ok().body(serviceMovimentoEstoque.buscaListaMovimentacoes());
     }
 
+    @GetMapping("relatorio")
+    public ResponseEntity<?> getRelatorioLucro() {
+        return ResponseEntity.ok().body(serviceMovimentoEstoque.gerarRelatorioLucros());
+    }
+
 }

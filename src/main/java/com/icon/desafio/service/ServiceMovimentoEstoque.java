@@ -1,5 +1,6 @@
 package com.icon.desafio.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +56,10 @@ public class ServiceMovimentoEstoque {
 
     public Set<MovimentoEstoqueDTO> buscaListaMovimentacoes() {
         return repositoryMovimentoEstoque.findAll().stream().map(MovimentoEstoqueDTO::new).collect(Collectors.toSet());
+    }
+
+    public List<Object[]> gerarRelatorioLucros() {
+        return repositoryMovimentoEstoque.gerarRelatorioLucros();
     }
 
 }
