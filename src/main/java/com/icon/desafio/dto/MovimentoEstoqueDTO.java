@@ -8,7 +8,7 @@ import com.icon.desafio.model.MovimentoEstoqueModel;
 
 public record MovimentoEstoqueDTO(
         Long id,
-        ProdutoDTO produto,
+        Long produtoId,
         TipoMovimentacao tipoMovimentacao,
         BigDecimal valorVenda,
         LocalDate dataVenda,
@@ -17,7 +17,7 @@ public record MovimentoEstoqueDTO(
     public MovimentoEstoqueDTO(MovimentoEstoqueModel model) {
         this(
             model.getId(),
-            new ProdutoDTO(model.getProduto()),
+            model.getProduto().getId(),
             model.getTipoMovimentacao(),
             model.getValorVenda(),
             model.getDataVenda(),

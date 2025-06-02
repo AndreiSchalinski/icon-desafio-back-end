@@ -5,7 +5,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
 import com.icon.desafio.enums.TipoMovimentacao;
@@ -28,19 +30,20 @@ public class ServiceMovimentoEstoque {
     }
 
     public MovimentoEstoqueDTO salvarMovimentacao(MovimentoEstoqueDTO dto) {
-        
-        Optional<ProdutoModel> produtoOpt = serviceProduto.buscarProdutoID(dto.produto().id());
+
+        Optional<ProdutoModel> produtoOpt = serviceProduto.buscarProdutoID(dto.produtoId());
         if (produtoOpt.isEmpty()) {
             return null;
         }
 
         ProdutoModel produto = produtoOpt.get();
-        TipoMovimentacao tipo = dto.tipoMovimentacao();
 
-        Integer saldoPrevisionado = serviceProduto.calcularSaldoMovimentoEstoque(dto.produto(), tipo.name());
+        Integer saldoPrevisionado = serviceProduto.calcularSaldoMovimentoEstoque(dto);
 
-        if (tipo == TipoMovimentacao.SAIDA && saldoPrevisionado <= 0) {
-            return null; 
+        if (dto.tipoMovimentacao() == TipoMovimentacao.SAIDA && saldoPrevisionado < 0) {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente para a saída do produto.");
+
         }
 
         produto.setQuantidade(saldoPrevisionado);
