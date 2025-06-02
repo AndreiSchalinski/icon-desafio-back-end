@@ -1,12 +1,17 @@
 package com.icon.desafio.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.icon.desafio.dto.MovimentacaoRelatorioDTO;
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
+import com.icon.desafio.dto.BalancoProdutoDTO;
 import com.icon.desafio.dto.ProdutoDTO;
 import com.icon.desafio.enums.TipoMovimentacao;
 import com.icon.desafio.model.ProdutoModel;
@@ -78,6 +83,37 @@ public class ServiceProduto {
 
     public void atualizaSaldoProduto(ProdutoModel model) {
         repositoryProduto.save(model);
+    }
+
+    public List<BalancoProdutoDTO> buscarProdutoPorTipo(Long idTipoProduto) {
+
+        List<Object[]> listProdutosTipo = repositoryProduto.consultarProdutosPorTipoComQuantidades(idTipoProduto);
+
+        List<BalancoProdutoDTO> dtos = new ArrayList<>();
+
+        for (Object[] row : listProdutosTipo) {
+
+            Long produtoId = (Long) row[0];
+            String descricao = (String) row[1];
+            Long tipoProdutoId = (Long) row[2];
+            String tipoProdutoNome = (String) row[3];
+            Long totalSaidas = (Long) row[4];
+            Long totalEntradas = (Long) row[5];
+            Integer saldoProdutoDisponivel = (Integer) row[6];
+
+            BalancoProdutoDTO dto = new BalancoProdutoDTO(
+                    produtoId,
+                    descricao,
+                    tipoProdutoId,
+                    tipoProdutoNome,
+                    totalSaidas,
+                    totalEntradas,
+                    saldoProdutoDisponivel);
+
+            dtos.add(dto);
+        }
+
+        return dtos;
     }
 
 }
