@@ -2,6 +2,7 @@ package com.icon.desafio.service;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.icon.desafio.dto.DetalhamentoMovimentacaoDTO;
 import com.icon.desafio.dto.MovimentacaoRelatorioDTO;
 import com.icon.desafio.dto.MovimentoEstoqueDTO;
 import com.icon.desafio.dto.ProdutoDTO;
@@ -82,6 +84,28 @@ public class ServiceMovimentoEstoque {
         }
 
         return dtos;
+    }
+
+    public DetalhamentoMovimentacaoDTO buscarDetalhamentoMovimentacao(Long id) {
+
+        List<Object[]> resultados = repositoryMovimentoEstoque.buscarDetalhamentoMovimentacao(id);
+
+        Object[] row = resultados.get(0);
+
+        Long codigo = (Long) row[0];
+        String descricao = (String) row[1];
+        String tipoProduto = (String) row[2];
+        BigDecimal precoFornecedor = (BigDecimal) row[3];
+        Integer quantidadeMovimentada = (Integer) row[4];
+
+        DetalhamentoMovimentacaoDTO dto = new DetalhamentoMovimentacaoDTO(
+                codigo,
+                descricao,
+                tipoProduto,
+                precoFornecedor,
+                quantidadeMovimentada);
+
+        return dto;
     }
 
 }
