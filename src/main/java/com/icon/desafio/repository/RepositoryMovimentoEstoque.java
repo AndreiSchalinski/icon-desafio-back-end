@@ -1,9 +1,11 @@
 package com.icon.desafio.repository;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.icon.desafio.model.MovimentoEstoqueModel;
 
@@ -21,5 +23,17 @@ public interface RepositoryMovimentoEstoque extends JpaRepository<MovimentoEstoq
             GROUP BY p.id
             """)
     Set<Object[]> gerarRelatorioLucros();
+
+    @Query("""
+            SELECT p.codigo,
+                p.descricao,
+                p.tipoProduto.nome,
+                p.precoFornecedor,
+                m.quantidadeMovimentada
+            FROM MovimentoEstoqueModel m
+            JOIN m.produto p
+            WHERE m.id = :id
+            """)
+    List<Object[]> buscarDetalhamentoMovimentacao(@Param("id") Long id);
 
 }
